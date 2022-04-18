@@ -1,8 +1,9 @@
 import React, {ChangeEvent} from 'react';
 import {Input} from "./Input";
 import {FilterTodoList, TaskType, TodoListsType} from "../App";
-import {Button} from "./Button";
 import {Update} from "./Update";
+import {FullButton} from "./Button";
+
 
 
 
@@ -46,10 +47,11 @@ export const TodoList = (props:TodoListType) => {
 
                 <h3>
                     <Update callBack={onUpdateTitleHandler} title={props.titleTDL}/>
-                    <Button callBack={onRemoveTodoListHandler} titleButton={'Del'} classButton={''}/>
+                    <FullButton callBack={onRemoveTodoListHandler} titleButton={'Del'} classButton={''}/>
                 </h3>
 
             <Input callBackInput={(title) => addTaskHandler(props.idTDL, title)}/>
+
             <ul>
                 {props.tasks.map(t => {
                     const removeHandler = () => {
@@ -67,13 +69,13 @@ export const TodoList = (props:TodoListType) => {
                                onChange={onChangeHandler}/>
                         {/*<span>{t.titleTask}</span>*/}
                         <Update callBack={(newTitle) => onUpdateHandler(newTitle)} title={t.titleTask}/>
-                        <Button callBack={removeHandler} titleButton={'Del'} classButton={''}/>
+                        <FullButton callBack={removeHandler} titleButton={'Del'} classButton={''}/>
                     </li>
                 })}
             </ul>
-            <Button callBack={onFilterAllHandler} titleButton={'All'} classButton={props.filterTDL==='All'?'colorButton':''}/>
-            <Button callBack={onFilterActiveHandler} titleButton={'Active'} classButton={props.filterTDL==='Active'?'colorButton':''}/>
-            <Button callBack={onFilterCompletedHandler} titleButton={'Completed'} classButton={props.filterTDL==='Completed'?'colorButton':''}/>
+            <FullButton callBack={onFilterAllHandler} titleButton={'All'} classButton={props.filterTDL==='All'?'colorButton':''}/>
+            <FullButton callBack={onFilterActiveHandler} titleButton={'Active'} classButton={props.filterTDL==='Active'?'colorButton':''}/>
+            <FullButton callBack={onFilterCompletedHandler} titleButton={'Completed'} classButton={props.filterTDL==='Completed'?'colorButton':''}/>
         </div>
     );
 };

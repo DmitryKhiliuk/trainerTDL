@@ -1,5 +1,6 @@
 import React, {ChangeEvent,KeyboardEvent, useState} from 'react';
-import {Button} from "./Button";
+import {FullButton} from "./Button";
+
 
 type InputType = {
     callBackInput: (title:string) => void
@@ -31,7 +32,7 @@ export const Input = (props:InputType) => {
                    value={title}
                    className={error ? 'error' : ''}/>
 
-            <Button callBack={addHandler} titleButton={'Add'} classButton={''}/>
+            <FullButton callBack={addHandler} titleButton={'Add'} classButton={''}/>
             {error && <div className={'errorMessage'}>{error}</div>}
         </div>
     );
