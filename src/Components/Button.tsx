@@ -1,11 +1,13 @@
 import React from 'react';
-import {Button, IconButton} from "@mui/material";
+import {Button, ButtonGroup, IconButton} from "@mui/material";
 import {Delete} from "@mui/icons-material"
+import classes from './Button.module.css'
+
 
 type FullButtonType = {
     callBack: () => void
     titleButton: string
-    classButton: string
+
 }
 
 export const FullButton = (props:FullButtonType) => {
@@ -15,11 +17,11 @@ export const FullButton = (props:FullButtonType) => {
       props.callBack()
     }
     return (
-        <div>
-            {props.titleButton==='Del' && <IconButton aria-label="delete"><Delete/></IconButton>}
-            {props.titleButton==='Add' && <Button variant="contained" onClick={onClickHandler} className={props.classButton}>{props.titleButton}</Button>}
+        <>
+            {props.titleButton==='Del' && <IconButton aria-label="delete" onClick={onClickHandler}><Delete/></IconButton>}
+            {props.titleButton==='Add' && <Button variant="contained" onClick={onClickHandler} className={classes.button}>{props.titleButton}</Button>}
 
-        </div>
+        </>
         // <button onClick={onClickHandler} className={props.classButton}>{props.titleButton}</button>
 
     );

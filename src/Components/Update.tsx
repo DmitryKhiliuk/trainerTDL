@@ -1,4 +1,5 @@
 import React, {ChangeEvent, useState} from 'react';
+import {TextField} from "@mui/material";
 
 type UpdateType = {
     callBack: (newTitle:string) => void
@@ -22,9 +23,16 @@ export const Update = (props:UpdateType) => {
     }
 
     return (
-            edit ? <input onChange={onChangeHandler}
-                          value={newTitle} autoFocus
-                          onBlur={onBlurHandler}/> :
+            edit ?
+                <TextField id="standard-basic"
+                           variant="standard"
+                           onChange={onChangeHandler}
+                           value={newTitle}
+                           autoFocus
+                           size={'small'}
+                           onBlur={onBlurHandler}
+
+                /> :
                 <span onDoubleClick={onDblHandler}>{props.title}</span>
     );
 };

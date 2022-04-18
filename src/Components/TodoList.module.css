@@ -1,0 +1,18 @@
+.button  {
+    background: #757575;
+    border: none;
+}
+
+.active {
+    background: white;
+    color: #757575;
+    border: white;
+}
+
+.button:hover {
+    background: #616161;
+}
+
+.active:hover {
+    background: none;
+}

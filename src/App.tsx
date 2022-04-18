@@ -3,6 +3,8 @@ import './App.css';
 import {TodoList} from "./Components/TodoList";
 import {v1} from "uuid";
 import {Input} from "./Components/Input";
+import {Container, Grid, Paper, StyledEngineProvider} from "@mui/material";
+import {Header} from "./Components/Header";
 
 export type FilterTodoList = 'All' | 'Active' | 'Completed'
 
@@ -73,8 +75,14 @@ function App() {
     }
 
   return (
+      <StyledEngineProvider injectFirst>
     <div className="App">
+        <Header />
+        <Container fixed>
+        <Grid container style={{padding:'20px'}}>
         <Input callBackInput={addTodoListHandler}/>
+        </Grid>
+        <Grid container spacing={8}>
         {todoLists.map((el) => {
             let TasksForTodoList = tasks[el.idTDL]
             if (el.filterTDL === 'Active') {
@@ -84,7 +92,9 @@ function App() {
                 TasksForTodoList = TasksForTodoList.filter(el => el.isDone)
             }
 
-            return <TodoList tasks={TasksForTodoList}
+            return <Grid item>
+            <Paper elevation={3} style={{padding: '10px'}}>
+            <TodoList tasks={TasksForTodoList}
                              todoLists={todoLists}
                              idTDL={el.idTDL}
                              key={el.idTDL}
@@ -97,6 +107,8 @@ function App() {
                              removeTodoList={removeTodoList}
                              updateTask={updateTask}
                              updateTitleTasks={updateTitleTasks}/>
+            </Paper>
+            </Grid>
         })}
 
 
@@ -104,7 +116,10 @@ function App() {
 
 
 
+        </Grid>
+        </Container>
     </div>
+      </StyledEngineProvider>
   );
 }
 

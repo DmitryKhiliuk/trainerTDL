@@ -3,6 +3,10 @@ import {Input} from "./Input";
 import {FilterTodoList, TaskType, TodoListsType} from "../App";
 import {Update} from "./Update";
 import {FullButton} from "./Button";
+import styles from './TodoList.module.css'
+import {Button, ButtonGroup, Checkbox, StyledEngineProvider} from "@mui/material";
+
+
 
 
 
@@ -24,6 +28,8 @@ type TodoListType = {
 }
 
 
+
+
 export const TodoList = (props:TodoListType) => {
 
     const onFilterAllHandler = () => {props.changeFilter(props.idTDL,'All')}
@@ -42,12 +48,16 @@ export const TodoList = (props:TodoListType) => {
         props.updateTitleTasks(props.idTDL, newTitleTasks)
     }
 
+    // let active = props.filterTDL === 'Active' ? ${styles.active} : ${styles.button}
+
+
+
     return (
         <div>
 
                 <h3>
                     <Update callBack={onUpdateTitleHandler} title={props.titleTDL}/>
-                    <FullButton callBack={onRemoveTodoListHandler} titleButton={'Del'} classButton={''}/>
+                    <FullButton callBack={onRemoveTodoListHandler} titleButton={'Del'} />
                 </h3>
 
             <Input callBackInput={(title) => addTaskHandler(props.idTDL, title)}/>
@@ -64,18 +74,33 @@ export const TodoList = (props:TodoListType) => {
                       props.updateTask(props.idTDL,t.id,newTitle)
                     }
                     return  <li key={t.id}>
-                        <input type={"checkbox"}
-                               checked={t.isDone}
-                               onChange={onChangeHandler}/>
+                        <Checkbox checked={t.isDone} onChange={onChangeHandler} color="default"/>
                         {/*<span>{t.titleTask}</span>*/}
                         <Update callBack={(newTitle) => onUpdateHandler(newTitle)} title={t.titleTask}/>
-                        <FullButton callBack={removeHandler} titleButton={'Del'} classButton={''}/>
+                        <FullButton callBack={removeHandler} titleButton={'Del'} />
                     </li>
                 })}
             </ul>
-            <FullButton callBack={onFilterAllHandler} titleButton={'All'} classButton={props.filterTDL==='All'?'colorButton':''}/>
-            <FullButton callBack={onFilterActiveHandler} titleButton={'Active'} classButton={props.filterTDL==='Active'?'colorButton':''}/>
-            <FullButton callBack={onFilterCompletedHandler} titleButton={'Completed'} classButton={props.filterTDL==='Completed'?'colorButton':''}/>
+
+
+
+            {/*<ButtonGroup variant="contained" aria-label="outlined primary button group">
+                <Button onClick={onFilterAllHandler} className={props.filterTDL === 'All' ? `${styles.active}` : `${styles.button}`} style={{border: "white"}}>All</Button>
+                <Button onClick={onFilterActiveHandler} className={props.filterTDL === 'Active' ? `${styles.active}` : `${styles.button}`} style={{border: "white"}}>Active</Button>
+                <Button onClick={onFilterCompletedHandler} className={props.filterTDL === 'Completed' ? `${styles.active}` : `${styles.button}`} >Completed</Button>
+            </ButtonGroup>*/}
+
+            <ButtonGroup variant="contained" aria-label="outlined primary button group" >
+                <Button onClick={onFilterAllHandler} className={props.filterTDL === 'All' ? `${styles.active}` : `${styles.button}`} style={{border: "white"}}>All</Button>
+                <Button onClick={onFilterActiveHandler} className={props.filterTDL === 'Active' ? `${styles.active}` : `${styles.button}`} style={{border: "white"}}>Active</Button>
+                <Button onClick={onFilterCompletedHandler} className={props.filterTDL === 'Completed' ? `${styles.active}` : `${styles.button}`} >Completed</Button>
+            </ButtonGroup>
+
+
+
+
+
+
         </div>
     );
 };
