@@ -52,12 +52,18 @@ function App() {
         const newTask = {id:v1(), titleTask: title, isDone: false}
         setTasks({...tasks, [todoListID]:[newTask, ...tasks[todoListID]]})
     }
-    const changeFilter = (id:string, filter:FilterTodoList) => {
-        setTodoLists(todoLists.map(el => el.idTDL === id ? {...el,filterTDL:filter}:el))
-    }
+
     const changeStatus = (todoListID:string, id:string, isDone:boolean) => {
         setTasks({...tasks, [todoListID]:tasks[todoListID].map(el => el.id === id ? {...el,isDone:isDone}:el)})
     }
+
+    const updateTask = (todoListID:string, id:string, newTitle:string) => {
+        setTasks({...tasks, [todoListID]:tasks[todoListID].map(el => el.id === id ? {...el, titleTask: newTitle} : el)})
+    }
+
+
+
+
     const removeTodoList = (todoListID:string) => {
         setTodoLists(todoLists.filter(el => el.idTDL !== todoListID))
         delete tasks[todoListID]
@@ -67,8 +73,11 @@ function App() {
         setTodoLists([{idTDL:newId, titleTDL: title, filterTDL: 'All'}, ...todoLists])
         setTasks({...tasks, [newId]:[]})
     }
-    const updateTask = (todoListID:string, id:string, newTitle:string) => {
-        setTasks({...tasks, [todoListID]:tasks[todoListID].map(el => el.id === id ? {...el, titleTask: newTitle} : el)})
+
+
+
+    const changeFilter = (id:string, filter:FilterTodoList) => {
+        setTodoLists(todoLists.map(el => el.idTDL === id ? {...el,filterTDL:filter}:el))
     }
     const updateTitleTasks = (id: string, newTitleTasks: string) => {
         setTodoLists(todoLists.map(el => el.idTDL === id ? {...el, titleTDL:newTitleTasks} : el))
@@ -76,49 +85,43 @@ function App() {
 
   return (
       <StyledEngineProvider injectFirst>
-    <div className="App">
-        <Header />
-        <Container fixed>
-        <Grid container style={{padding:'20px'}}>
-        <Input callBackInput={addTodoListHandler}/>
-        </Grid>
-        <Grid container spacing={8}>
-        {todoLists.map((el) => {
-            let TasksForTodoList = tasks[el.idTDL]
-            if (el.filterTDL === 'Active') {
-                TasksForTodoList = TasksForTodoList.filter(el => !el.isDone)
-            }
-            if (el.filterTDL === 'Completed') {
-                TasksForTodoList = TasksForTodoList.filter(el => el.isDone)
-            }
+            <div className="App">
+                <Header />
+                <Container fixed>
+                <Grid container style={{padding:'20px'}}>
+                <Input callBackInput={addTodoListHandler}/>
+                </Grid>
+                <Grid container spacing={8}>
+                {todoLists.map((el) => {
+                    /*let TasksForTodoList = tasks[el.idTDL]
+                    if (el.filterTDL === 'Active') {
+                        TasksForTodoList = TasksForTodoList.filter(el => !el.isDone)
+                    }
+                    if (el.filterTDL === 'Completed') {
+                        TasksForTodoList = TasksForTodoList.filter(el => el.isDone)
+                    }*/
 
-            return <Grid item>
-            <Paper elevation={3} style={{padding: '10px'}}>
-            <TodoList tasks={TasksForTodoList}
-                             todoLists={todoLists}
-                             idTDL={el.idTDL}
-                             key={el.idTDL}
-                             titleTDL={el.titleTDL}
-                             filterTDL={el.filterTDL}
-                             removeTask={removeTask}
-                             addTask={addTask}
-                             changeFilter={changeFilter}
-                             changeStatus={changeStatus}
-                             removeTodoList={removeTodoList}
-                             updateTask={updateTask}
-                             updateTitleTasks={updateTitleTasks}/>
-            </Paper>
-            </Grid>
-        })}
-
-
-
-
-
-
-        </Grid>
-        </Container>
-    </div>
+                    return <Grid item key={el.idTDL}>
+                    <Paper elevation={3} style={{padding: '10px'}}>
+                    <TodoList tasks={tasks[el.idTDL]}
+                                     todoLists={todoLists}
+                                     idTDL={el.idTDL}
+                                     /*key={el.idTDL}*/
+                                     titleTDL={el.titleTDL}
+                                     filterTDL={el.filterTDL}
+                                     removeTask={removeTask}
+                                     addTask={addTask}
+                                     changeFilter={changeFilter}
+                                     changeStatus={changeStatus}
+                                     removeTodoList={removeTodoList}
+                                     updateTask={updateTask}
+                                     updateTitleTasks={updateTitleTasks}/>
+                    </Paper>
+                    </Grid>
+                })}
+                </Grid>
+                </Container>
+            </div>
       </StyledEngineProvider>
   );
 }

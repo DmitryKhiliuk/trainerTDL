@@ -51,6 +51,13 @@ export const TodoList = (props:TodoListType) => {
     // let active = props.filterTDL === 'Active' ? ${styles.active} : ${styles.button}
 
 
+    let TasksForTodoList = props.tasks
+    if (props.filterTDL === 'Active') {
+        TasksForTodoList = TasksForTodoList.filter(el => !el.isDone)
+    }
+    if (props.filterTDL === 'Completed') {
+        TasksForTodoList = TasksForTodoList.filter(el => el.isDone)
+    }
 
     return (
         <div>
@@ -63,7 +70,7 @@ export const TodoList = (props:TodoListType) => {
             <Input callBackInput={(title) => addTaskHandler(props.idTDL, title)}/>
 
             <ul>
-                {props.tasks.map(t => {
+                {TasksForTodoList.map(t => {
                     const removeHandler = () => {
                         props.removeTask(props.idTDL, t.id)
                     }
