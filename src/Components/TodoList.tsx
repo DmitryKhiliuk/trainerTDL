@@ -5,6 +5,7 @@ import {Update} from "./Update";
 import {FullButton} from "./Button";
 import styles from './TodoList.module.css'
 import {Button, ButtonGroup, Checkbox, StyledEngineProvider} from "@mui/material";
+import {TaskList} from "./TaskList";
 
 
 
@@ -59,6 +60,18 @@ export const TodoList = (props:TodoListType) => {
         TasksForTodoList = TasksForTodoList.filter(el => el.isDone)
     }
 
+    const removeTask = (id:string) => {
+        props.removeTask(props.idTDL, id)
+    }
+
+    const changeStatus = (id:string, changeChecked: boolean) => {
+        props.changeStatus(props.idTDL, id, changeChecked)
+    }
+
+    const updateTask = (id: string, newTitle: string) => {
+        props.updateTask(props.idTDL, id, newTitle)
+    }
+
     return (
         <div>
 
@@ -71,21 +84,11 @@ export const TodoList = (props:TodoListType) => {
 
             <ul>
                 {TasksForTodoList.map(t => {
-                    const removeHandler = () => {
-                        props.removeTask(props.idTDL, t.id)
-                    }
-                    const onChangeHandler = (e:ChangeEvent<HTMLInputElement>) => {
-                        props.changeStatus(props.idTDL,t.id,e.currentTarget.checked)
-                    }
-                    const onUpdateHandler = (newTitle:string) => {
-                      props.updateTask(props.idTDL,t.id,newTitle)
-                    }
-                    return  <li key={t.id}>
-                        <Checkbox checked={t.isDone} onChange={onChangeHandler} color="default"/>
-                        {/*<span>{t.titleTask}</span>*/}
-                        <Update callBack={(newTitle) => onUpdateHandler(newTitle)} title={t.titleTask}/>
-                        <FullButton callBack={removeHandler} titleButton={'Del'} />
-                    </li>
+                    return <TaskList key={t.id}
+                                     tasks={t}
+                                     removeTask={removeTask}
+                                     changeStatus={changeStatus }
+                                     updateTask={updateTask}/>
                 })}
             </ul>
 
