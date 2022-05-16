@@ -1,11 +1,22 @@
-import React, {ChangeEvent} from 'react';
+import React from 'react';
 import {Input} from "./Input";
-import {FilterTodoList, TaskType, TodoListsType} from "../App";
+import { TaskType, TodoListsType} from "../App";
 import {Update} from "./Update";
 import {FullButton} from "./Button";
 import styles from './TodoList.module.css'
-import {Button, ButtonGroup, Checkbox, StyledEngineProvider} from "@mui/material";
+import {Button, ButtonGroup} from "@mui/material";
 import {TaskList} from "./TaskList";
+import {useDispatch, useSelector} from "react-redux";
+import {AppRootStateType} from "../State/store";
+import {
+    addTaskAC,
+    changeFilterAC,
+    changeStatusAC,
+    removeTaskAC,
+    removeTodoListAC, updateTitleTaskAC,
+    updateTitleTodoListAC
+} from "../State/Action";
+
 
 
 
@@ -13,74 +24,70 @@ import {TaskList} from "./TaskList";
 
 
 type TodoListType = {
-    tasks:Array<TaskType>
-    todoLists: TodoListsType[]
-    idTDL:string
-    titleTDL:string
-    filterTDL: FilterTodoList
-    removeTask: (todoListID:string, id:string) => void
-    addTask: (todoListID:string, title:string) => void
-    changeFilter: (id:string, filter: FilterTodoList) => void
-    changeStatus: (todoListID:string, id:string, isDone:boolean) => void
-    removeTodoList: (todoListID:string) => void
-    updateTask: (todoListID:string, id:string, newTitle:string) => void
-    updateTitleTasks: (id: string, newTitleTasks: string) => void
-
+    todoLists: TodoListsType
 }
 
 
 
 
-export const TodoList = (props:TodoListType) => {
+export const TodoList = ({todoLists}:TodoListType) => {
 
-    const onFilterAllHandler = () => {props.changeFilter(props.idTDL,'All')}
-    const onFilterActiveHandler = () => {props.changeFilter(props.idTDL,'Active')}
-    const onFilterCompletedHandler = () => {props.changeFilter(props.idTDL,'Completed')}
+    const {idTDL, titleTDL, filterTDL} = todoLists
+    const tasks = useSelector<AppRootStateType,TaskType[]>(state => state.tasks[idTDL])
+    const dispatch = useDispatch()
 
 
 
-    const addTaskHandler = (todoListID:string, title:string) => {
-        props.addTask(props.idTDL, title)
+
+    const onFilterAllHandler = () => {dispatch(changeFilterAC(idTDL, 'All'))}
+    const onFilterActiveHandler = () => {dispatch(changeFilterAC(idTDL, 'Active'))}
+    const onFilterCompletedHandler = () => {dispatch(changeFilterAC(idTDL, 'Completed'))}
+
+
+
+
+    const addTaskHandler = (idTDL:string, titleTask: string) => {
+        dispatch(addTaskAC(idTDL,titleTask))
     }
-    const onRemoveTodoListHandler = () => {
-        props.removeTodoList(props.idTDL)
+    const removeTodoList = () => {
+        dispatch(removeTodoListAC(idTDL))
     }
     const onUpdateTitleHandler = (newTitleTasks:string) => {
-        props.updateTitleTasks(props.idTDL, newTitleTasks)
+        dispatch(updateTitleTodoListAC(idTDL, newTitleTasks))
     }
 
     // let active = props.filterTDL === 'Active' ? ${styles.active} : ${styles.button}
 
 
-    let TasksForTodoList = props.tasks
-    if (props.filterTDL === 'Active') {
+    let TasksForTodoList = tasks
+    if (filterTDL === 'Active') {
         TasksForTodoList = TasksForTodoList.filter(el => !el.isDone)
     }
-    if (props.filterTDL === 'Completed') {
+    if (filterTDL === 'Completed') {
         TasksForTodoList = TasksForTodoList.filter(el => el.isDone)
     }
 
     const removeTask = (id:string) => {
-        props.removeTask(props.idTDL, id)
+        dispatch(removeTaskAC(idTDL, id))
     }
 
     const changeStatus = (id:string, changeChecked: boolean) => {
-        props.changeStatus(props.idTDL, id, changeChecked)
+        dispatch(changeStatusAC(idTDL, id, changeChecked))
     }
 
     const updateTask = (id: string, newTitle: string) => {
-        props.updateTask(props.idTDL, id, newTitle)
+        dispatch(updateTitleTaskAC(idTDL, id, newTitle))
     }
 
     return (
         <div>
 
                 <h3>
-                    <Update callBack={onUpdateTitleHandler} title={props.titleTDL}/>
-                    <FullButton callBack={onRemoveTodoListHandler} titleButton={'Del'} />
+                    <Update callBack={onUpdateTitleHandler} title={titleTDL}/>
+                    <FullButton callBack={removeTodoList} titleButton={'Del'} />
                 </h3>
 
-            <Input callBackInput={(title) => addTaskHandler(props.idTDL, title)}/>
+            <Input callBackInput={(title) => addTaskHandler(idTDL, title)}/>
 
             <ul>
                 {TasksForTodoList.map(t => {
@@ -101,9 +108,9 @@ export const TodoList = (props:TodoListType) => {
             </ButtonGroup>*/}
 
             <ButtonGroup variant="contained" aria-label="outlined primary button group" >
-                <Button onClick={onFilterAllHandler} className={props.filterTDL === 'All' ? `${styles.active}` : `${styles.button}`} style={{border: "white"}}>All</Button>
-                <Button onClick={onFilterActiveHandler} className={props.filterTDL === 'Active' ? `${styles.active}` : `${styles.button}`} style={{border: "white"}}>Active</Button>
-                <Button onClick={onFilterCompletedHandler} className={props.filterTDL === 'Completed' ? `${styles.active}` : `${styles.button}`} >Completed</Button>
+                <Button onClick={onFilterAllHandler} className={filterTDL === 'All' ? `${styles.active}` : `${styles.button}`} style={{border: "white"}}>All</Button>
+                <Button onClick={onFilterActiveHandler} className={filterTDL === 'Active' ? `${styles.active}` : `${styles.button}`} style={{border: "white"}}>Active</Button>
+                <Button onClick={onFilterCompletedHandler} className={filterTDL === 'Completed' ? `${styles.active}` : `${styles.button}`} >Completed</Button>
             </ButtonGroup>
 
 

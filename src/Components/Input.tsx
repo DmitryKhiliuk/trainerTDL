@@ -29,10 +29,6 @@ export const Input = (props:InputType) => {
 
     return (
         <div>
-            {/*<input onChange={onChangeHandler}
-                   onKeyPress={onKeyHandler}
-                   value={title}
-                   className={error ? 'error' : ''}/>*/}
 
             <TextField id="outlined-basic"
                        label= {!error ? "Entry" : "Error"}
