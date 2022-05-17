@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useCallback} from 'react';
 import {Input} from "./Input";
 import { TaskType, TodoListsType} from "../App";
 import {Update} from "./Update";
@@ -17,44 +17,28 @@ import {
     updateTitleTodoListAC
 } from "../State/Action";
 
-
-
-
-
-
-
 type TodoListType = {
     todoLists: TodoListsType
 }
-
-
-
-
-export const TodoList = ({todoLists}:TodoListType) => {
+export const TodoList = React.memo(({todoLists}:TodoListType) => {
 
     const {idTDL, titleTDL, filterTDL} = todoLists
     const tasks = useSelector<AppRootStateType,TaskType[]>(state => state.tasks[idTDL])
     const dispatch = useDispatch()
 
+    const onFilterAllHandler = useCallback(() => {dispatch(changeFilterAC(idTDL, 'All'))},[dispatch])
+    const onFilterActiveHandler = useCallback(() => {dispatch(changeFilterAC(idTDL, 'Active'))},[dispatch])
+    const onFilterCompletedHandler = useCallback(() => {dispatch(changeFilterAC(idTDL, 'Completed'))},[dispatch])
 
-
-
-    const onFilterAllHandler = () => {dispatch(changeFilterAC(idTDL, 'All'))}
-    const onFilterActiveHandler = () => {dispatch(changeFilterAC(idTDL, 'Active'))}
-    const onFilterCompletedHandler = () => {dispatch(changeFilterAC(idTDL, 'Completed'))}
-
-
-
-
-    const addTaskHandler = (idTDL:string, titleTask: string) => {
+    const addTaskHandler = useCallback((idTDL:string, titleTask: string) => {
         dispatch(addTaskAC(idTDL,titleTask))
-    }
-    const removeTodoList = () => {
+    },[dispatch])
+    const removeTodoList = useCallback(() => {
         dispatch(removeTodoListAC(idTDL))
-    }
-    const onUpdateTitleHandler = (newTitleTasks:string) => {
+    },[dispatch])
+    const onUpdateTitleHandler = useCallback((newTitleTasks:string) => {
         dispatch(updateTitleTodoListAC(idTDL, newTitleTasks))
-    }
+    },[dispatch])
 
     // let active = props.filterTDL === 'Active' ? ${styles.active} : ${styles.button}
 
@@ -67,17 +51,17 @@ export const TodoList = ({todoLists}:TodoListType) => {
         TasksForTodoList = TasksForTodoList.filter(el => el.isDone)
     }
 
-    const removeTask = (id:string) => {
+    const removeTask = useCallback((id:string) => {
         dispatch(removeTaskAC(idTDL, id))
-    }
+    },[dispatch])
 
-    const changeStatus = (id:string, changeChecked: boolean) => {
+    const changeStatus = useCallback((id:string, changeChecked: boolean) => {
         dispatch(changeStatusAC(idTDL, id, changeChecked))
-    }
+    },[dispatch])
 
-    const updateTask = (id: string, newTitle: string) => {
+    const updateTask = useCallback((id: string, newTitle: string) => {
         dispatch(updateTitleTaskAC(idTDL, id, newTitle))
-    }
+    },[dispatch])
 
     return (
         <div>
@@ -120,5 +104,5 @@ export const TodoList = ({todoLists}:TodoListType) => {
 
         </div>
     );
-};
+});
 

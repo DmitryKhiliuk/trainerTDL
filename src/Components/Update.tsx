@@ -6,7 +6,7 @@ type UpdateType = {
     title: string
 }
 
-export const Update = (props:UpdateType) => {
+export const Update = React.memo((props:UpdateType) => {
 
     const [newTitle, setNewTitle] = useState(props.title)
     const [edit, setEdit] = useState(false)
@@ -35,5 +35,5 @@ export const Update = (props:UpdateType) => {
                 /> :
                 <span onDoubleClick={onDblHandler}>{props.title}</span>
     );
-};
+});
 

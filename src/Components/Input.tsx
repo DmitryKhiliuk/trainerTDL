@@ -8,7 +8,7 @@ type InputType = {
     callBackInput: (title:string) => void
 }
 
-export const Input = (props:InputType) => {
+export const Input = React.memo((props:InputType) => {
 
     const [title, setTitle] = useState('')
     const [error, setError] = useState<string|null>('')
@@ -45,5 +45,5 @@ export const Input = (props:InputType) => {
             {/*{error && <div className={'errorMessage'}>{error}</div>}*/}
         </div>
     );
-};
+});
 

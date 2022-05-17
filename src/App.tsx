@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useCallback} from 'react';
 import './App.css';
 import {TodoList} from "./Components/TodoList";
 import {Input} from "./Components/Input";
@@ -35,10 +35,10 @@ function App() {
     const dispatch = useDispatch()
 
 
-    const addTodoListHandler = (titleTDL: string) => {
+    const addTodoListHandler = useCallback((titleTDL: string) => {
         const action = addTodoListAC(titleTDL)
         dispatch(action)
-    }
+    },[dispatch])
 
 
   return (

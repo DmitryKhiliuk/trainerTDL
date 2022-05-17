@@ -1,4 +1,4 @@
-import React, {ChangeEvent} from 'react';
+import React, {ChangeEvent, useCallback} from 'react';
 import {Checkbox} from "@mui/material";
 import {Update} from "./Update";
 import {FullButton} from "./Button";
@@ -11,26 +11,26 @@ type TaskListType = {
     updateTask: (id: string, newTitle: string) => void
 }
 
-export const TaskList = (props:TaskListType) => {
+export const TaskList = React.memo(({tasks, removeTask, changeStatus, updateTask}:TaskListType) => {
 
-            const removeHandler = () => {
-            props.removeTask(props.tasks.id)
-        }
+            const removeHandler = useCallback(() => {
+            removeTask(tasks.id)
+        },[removeTask, tasks.id])
 
-            const onChangeHandler = (e:ChangeEvent<HTMLInputElement>) => {
+            const onChangeHandler = useCallback((e:ChangeEvent<HTMLInputElement>) => {
                 let changeChecked = e.currentTarget.checked
-                props.changeStatus(props.tasks.id,changeChecked)
-        }
-            const onUpdateHandler = (newTitle:string) => {
-                props.updateTask(props.tasks.id,newTitle)
-            }
-            return  <li >
-                <Checkbox checked={props.tasks.isDone} onChange={onChangeHandler} color="default"/>
+                changeStatus(tasks.id,changeChecked)
+        },[changeStatus, tasks.id])
+            const onUpdateHandler = useCallback((newTitle:string) => {
+                updateTask(tasks.id,newTitle)
+            }, [updateTask, tasks.id])
+            return  <div >
+                <Checkbox checked={tasks.isDone} onChange={onChangeHandler} color="default"/>
                 {/*<span>{t.titleTask}</span>*/}
-                <Update callBack={(newTitle) => onUpdateHandler(newTitle)} title={props.tasks.titleTask}/>
+                <Update callBack={(newTitle) => onUpdateHandler(newTitle)} title={tasks.titleTask}/>
                 <FullButton callBack={removeHandler} titleButton={'Del'} />
-            </li>
+            </div>
 
 
-};
+});
 
